@@ -38,7 +38,9 @@ if __name__ == "__main__":
 
     # set our compilation flags
     # march=native to enable SIMD optimizations based on our cpu
-    # LTO/whole-program docs: https://gcc.gnu.org/onlinedocs/gcc-11.1.0/gcc/Optimize-Options.html#index-flto
+    # LTO docs: https://gcc.gnu.org/onlinedocs/gcc-11.1.0/gcc/Optimize-Options.html#index-flto
+    # DO NOT USE -fwhole-program
+    # tree-vectorize helps with SIMD stuff
     # no-semantic-interposition is more useful for code that exports a ton of symbols, but I include it anyway:
     # https://stackoverflow.com/questions/35745543/new-option-in-gcc-5-3-fno-semantic-interposition
     # profile-partial-training stops gcc from assuming that functions not in the gcda data are never executed
@@ -47,7 +49,7 @@ if __name__ == "__main__":
     # https://gcc.gnu.org/onlinedocs/gcc-11.1.0/gcc/Overall-Options.html#index-pipe
     os.environ[
         "CFLAGS"
-    ] = "-march='native' -flto -fwhole-program -fno-semantic-interposition -fprofile-partial-training -pipe "
+    ] = "-march='native' -flto -ftree-vectorize -fno-semantic-interposition -fprofile-partial-training -pipe "
 
     gcda_exists = set()
 
